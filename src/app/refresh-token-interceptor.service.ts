@@ -4,7 +4,6 @@ import {
   HttpErrorResponse,
   HttpEvent,
   HttpHandler,
-  HttpHeaders,
   HttpInterceptor,
   HttpRequest
 } from "@angular/common/http";
@@ -39,22 +38,24 @@ export class RefreshTokenInterceptorService implements HttpInterceptor {
             return next.handle(req);
           }
 
+          if (req.url == `${environment.baseURL}/users/refresh`){
+            this.localStorageService.clear();
+            return next.handle(req);
+          }
+
           return this.http.post<any>(
-            `${environment.baseURL}/auth/refresh`,
-            {},
-            {headers: new HttpHeaders().set('Authorization', `Bearer ${tokenOld.value}`)}
+            `${environment.baseURL}/users/refresh`,
+            {"token": `${tokenOld.value}`}
           )
           .pipe(
             tap({
               next: response => {
-                tokenOld.value = response
-
+                tokenOld.value = response.token
                 this.localStorageService.set('auth_app_token', tokenOld)
               },
               error: error => {
-                this.localStorageService.remove('auth_app_token')
+                this.localStorageService.remove("auth_app_token")
               }
-
             }),
             mergeMap(() => this.authInterceptor.intercept(req, next))
           );

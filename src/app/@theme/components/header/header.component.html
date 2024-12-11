@@ -78,8 +78,10 @@
   <nb-actions size="small">
     <nb-action class="user-action" *nbIsGranted="['view', 'user']" >
       <div *ngIf="user;else noUserTool">
-        <nb-user [nbContextMenu]="userMenu" nbContextMenuTag="userMenu"
-                 [name]="user?.name">
+        <nb-user [nbContextMenu]="userMenu"
+          nbContextMenuTag="userMenu"
+          [name]="user?.name"
+        >
         </nb-user>
       </div>
       <ng-template #noUserTool>

@@ -7,11 +7,9 @@ import {
 import {
   NbComponentStatus,
   NbMenuService,
-  NbSidebarService,
   NbToastrService
 } from '@nebular/theme';
 
-import { LayoutService } from '../../../@core/utils';
 import {
   filter,
   takeUntil
@@ -48,29 +46,31 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ];
 
   constructor(
-    /* private readonly sidebarService: NbSidebarService, */
     private readonly menuService: NbMenuService,
-    /* private readonly layoutService: LayoutService, */
     private readonly userAuthService: AuthService,
     private readonly localStorageService: StorageService,
     private readonly toastrService: NbToastrService,
     private readonly router: Router,
-    ) {
+  ) {
   }
 
   ngOnInit() {
-    this.userAuthService.getUserAuthenticated()
-    .pipe(takeUntil(this.destroy$))
-    .subscribe({
-      next: (user) => {
-        this.localStorageService.set('auth_user', user)
-        this.user = user
-      },
-      error: (error) => {
-        this.localStorageService.clear()
-        /* this.router.navigate(['auth/login']); */
-      }
-    });
+    if(this.localStorageService.get('auth_app_token') != null){
+      this.userAuthService.getUserAuthenticated()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (user) => {
+          this.localStorageService.set('auth_user', user)
+          this.user = user
+        },
+        error: (error) => {
+          this.localStorageService.clear()
+          this.router.navigate(['auth/login']);
+        }
+      });
+    }else{
+      this.localStorageService.clear();
+    }
 
     this.menuService.onItemClick()
     .pipe(
@@ -88,13 +88,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
-
-  /* toggleSidebar(): boolean {
-    this.sidebarService.toggle(true, 'menu-sidebar');
-    this.layoutService.changeLayoutSize();
-
-    return false;
-  } */
 
   navigateHome() {
     this.menuService.navigateHome();

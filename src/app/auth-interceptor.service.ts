@@ -8,11 +8,13 @@ import {
   HttpInterceptor,
   HttpRequest
 } from '@angular/common/http';
-import { Observable,
+import {
+  Observable,
   Subject
 } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { StorageService } from './storage.service';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -20,14 +22,17 @@ import { StorageService } from './storage.service';
 export class AuthInterceptor implements HttpInterceptor, OnDestroy {
   private readonly destroy$: Subject<void> = new Subject<void>();
 
-  constructor(private readonly localStorageService: StorageService)
-  {
+  constructor(private readonly localStorageService: StorageService) {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    let tokenValid = this.localStorageService.get('auth_app_token')
+    let tokenValid = this.localStorageService.get('auth_app_token');
 
     if (tokenValid == null) {
+      return next.handle(req);
+    }
+
+    if (req.url == `${environment.baseURL}/users/refresh` || req.url == `${environment.baseURL}/users/logout`){
       return next.handle(req);
     }
 

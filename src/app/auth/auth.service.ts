@@ -27,7 +27,7 @@ export class AuthService {
   }
 
   getUserAuthenticated(): Observable<User> {
-    return this.http.get<User>(`${environment.baseURL}/auth/user`)
+    return this.http.get<User>(`${environment.baseURL}/users/me`)
     .pipe(map((obj) => obj));
   }
 
@@ -40,6 +40,7 @@ export class AuthService {
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe((result => {
           this.localStorageService.remove('auth_user')
+          this.localStorageService.remove('auth_app_token')
           this.router.navigate(['auth/login']);
         }));
       },
@@ -50,7 +51,8 @@ export class AuthService {
   }
 
   logout(): Observable<any> {
-    return this.http.post(`${environment.baseURL}/auth/logout`, {});
+    let tokenOld = this.localStorageService.get('auth_app_token')
+    return this.http.post(`${environment.baseURL}/users/logout`, {"token": `${tokenOld.value}`});
   }
 
   getConfigValue(key: string): any {

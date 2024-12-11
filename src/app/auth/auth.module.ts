@@ -42,18 +42,18 @@ import { NgxAuthRoutingModule } from './auth-routing.module';
 
           baseEndpoint: environment.baseURL,
           login: {
-            endpoint: '/auth/login',
+            endpoint: '/users/login',
             method: 'post',
             redirect: {
-              success: '/dashboard',
+              success: '/',
               failure: null,
             },
           },
           register: {
-            endpoint: '/auth/register',
+            endpoint: '/users/register',
             method: 'post',
             redirect: {
-              success: '/dashboard',
+              success: '/auth/login',
               failure: null,
             },
           },
