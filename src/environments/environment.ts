@@ -10,5 +10,6 @@
 
 export const environment = {
   baseURL: 'http://localhost:8080',
+  baseERPUrl: 'http://localhost:4201',
   production: false,
 };

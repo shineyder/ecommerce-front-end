@@ -56,6 +56,8 @@ import { NgxAuthRoutingModule } from './auth-routing.module';
               success: '/auth/login',
               failure: null,
             },
+            requireValidToken: false,
+            defaultMessages: ['Conta criada com sucesso!'],
           },
         }),
       ],
