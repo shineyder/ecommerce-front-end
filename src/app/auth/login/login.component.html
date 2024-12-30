@@ -36,7 +36,10 @@
         Email é obrigatório!
       </p>
       <p class="caption status-danger" *ngIf="email.errors?.pattern">
-        Endereço de email precisa existir!
+        Email precisa ser válido!
+      </p>
+      <p class="caption status-danger" *ngIf="email.errors?.maxlength">
+        Email deve conter até {{getConfigValue('forms.validation.email.maxLength')}} caracteres
       </p>
     </ng-container>
   </div>
@@ -58,6 +61,7 @@
       [required]="getConfigValue('forms.validation.password.required')"
       [minlength]="getConfigValue('forms.validation.password.minLength')"
       [maxlength]="getConfigValue('forms.validation.password.maxLength')"
+      [pattern]="getConfigValue('forms.validation.password.regexp')"
       [attr.aria-invalid]="password.invalid && password.touched ? true : null"
     >
     <ng-container *ngIf="password.invalid && password.touched ">
@@ -66,6 +70,9 @@
       </p>
       <p class="caption status-danger" *ngIf="password.errors?.minlength || password.errors?.maxlength">
         Senha deve conter de {{ getConfigValue('forms.validation.password.minLength') }} até {{ getConfigValue('forms.validation.password.maxLength') }} caracteres
+      </p>
+      <p class="caption status-danger" *ngIf="password.errors?.pattern && !password.errors?.minlength">
+        Senha deve conter pelo menos uma letra maiúscula, uma letra minúscula, um número e um caracter especial
       </p>
     </ng-container>
   </div>

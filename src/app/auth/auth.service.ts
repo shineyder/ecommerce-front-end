@@ -23,7 +23,7 @@ export class AuthService {
     private readonly router: Router,
     private readonly localStorageService: StorageService,
     private readonly toastrService: NbToastrService,
-    ) {
+  ) {
   }
 
   getUserAuthenticated(): Observable<User> {

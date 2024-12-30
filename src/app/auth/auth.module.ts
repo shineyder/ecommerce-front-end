@@ -2,7 +2,11 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { NbAuthJWTToken, NbAuthModule, NbPasswordAuthStrategy } from '@nebular/auth';
+import {
+  NbAuthJWTToken,
+  NbAuthModule,
+  NbPasswordAuthStrategy
+} from '@nebular/auth';
 
 import {
   NbAlertModule,
@@ -59,6 +63,9 @@ import { NgxAuthRoutingModule } from './auth-routing.module';
             requireValidToken: false,
             defaultMessages: ['Conta criada com sucesso!'],
           },
+          errors: {
+            key: 'errors'
+          }
         }),
       ],
       forms: {
@@ -66,7 +73,7 @@ import { NgxAuthRoutingModule } from './auth-routing.module';
           redirectDelay: 0,
           strategy: 'email',
           showMessages: {
-            success: false,
+            success: true,
             error: true,
           },
         },
@@ -78,6 +85,24 @@ import { NgxAuthRoutingModule } from './auth-routing.module';
             error: true,
           }
         },
+        validation: {
+          password: {
+            required: true,
+            minLength: 4,
+            maxLength: 16,
+            regexp: '^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=.]).{4,16}$'
+          },
+          email: {
+            required: true,
+            maxLength: 256,
+          },
+          fullName: {
+            required: true,
+            minLength: 3,
+            maxLength: 255,
+            regexp: '^[A-Za-z][A-Za-z ]*[A-Za-z]$',
+          }
+        }
       },
     }),
   ],
